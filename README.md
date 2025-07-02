@@ -1,52 +1,48 @@
-# Astro Starter Kit: Basics
+# App Movies TMDB
 
-```sh
-pnpm create astro@latest -- --template basics
-```
+Aplicación web para explorar y buscar películas utilizando la API de [The Movie Database (TMDB)](https://www.themoviedb.org/).
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Características
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Búsqueda de películas por título.
+- Visualización de detalles de cada película.
+- Listado de películas populares y mejor valoradas.
+- Interfaz intuitiva y responsiva.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+## Tecnologías utilizadas
 
-## 🚀 Project Structure
+- **Frontend:** (Ejemplo: React, Vue, Angular)
+- **Estilos:** (Ejemplo: CSS, Tailwind, Bootstrap)
+- **API:** [TMDB API](https://developers.themoviedb.org/3)
 
-Inside of your Astro project, you'll see the following folders and files:
+## Instalación
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+1. Clona el repositorio:
+  ```bash
+  git clone https://github.com/tu-usuario/app-movies-tmdb.git
+  ```
+2. Instala las dependencias:
+  ```bash
+  npm install
+  ```
+3. Crea un archivo `.env` con tu clave de API de TMDB:
+  ```
+  REACT_APP_TMDB_API_KEY=tu_api_key
+  ```
+4. Inicia la aplicación:
+  ```bash
+  npm start
+  ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Uso
 
-## 🧞 Commands
+- Ingresa el nombre de una película en la barra de búsqueda.
+- Haz clic en una película para ver sus detalles.
 
-All commands are run from the root of the project, from a terminal:
+## Créditos
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+- [The Movie Database (TMDB)](https://www.themoviedb.org/) por la API y los datos.
 
-## 👀 Want to learn more?
+## Licencia
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Este proyecto está bajo la licencia MIT.
