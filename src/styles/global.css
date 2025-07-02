@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Supports weights 100-700 */
+@import '@fontsource-variable/arima';
+/* Supports weights 100-900 */
+@import '@fontsource-variable/montserrat';
+
+@theme {
+  --font-arima: 'Arima Variable', system-ui;
+  --font-montserrat: 'Montserrat Variable', system-ui;
+}
+.text-title {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    line-height: 1.2;
+}
+.text-subtitle {
+    font-size: clamp(1.7rem, 2.5vw, 2.2rem);
+}
+
+.text-paragraph {
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  line-height: 1.25;
+}
