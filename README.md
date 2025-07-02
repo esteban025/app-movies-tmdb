@@ -46,3 +46,4 @@ Aplicación web para explorar y buscar películas utilizando la API de [The Movi
 ## Licencia
 
 Este proyecto está bajo la licencia MIT.
+Hemos actualizado todo el env
