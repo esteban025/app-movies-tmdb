@@ -15,10 +15,10 @@ function getTrendingMovies() {
 const trendingMovies: TrendingMovie[] = await getTrendingMovies();
 ---
 
-<section>
+<section class="h-full bg-slate-950">
   <div class="w-11/12 mx-auto space-y-8">
     <h2 class="font-bold font-arima">Películas en Tendencia</h2>
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-4">
       {
         trendingMovies.map((movie) => (
           <CardMovie

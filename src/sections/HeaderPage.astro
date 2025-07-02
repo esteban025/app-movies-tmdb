@@ -1,13 +1,10 @@
 ---
 import Logo from "@assets/logo-page.svg";
-const navigationLinks = [
-  { href: "/movies", label: "Películas" },
-  { href: "/tv-shows", label: "Series de TV" },
-  { href: "/trending", label: "Tendencias" },
-];
+import Menu from "@assets/menu.svg";
+import NavHeader from "@components/NavHeader.astro";
 ---
 
-<header class="relative" transition:name="header-page">
+<header class="bg-slate-950 sticky top-0 z-40" transition:name="header-page">
   <div class="w-11/12 mx-auto flex items-center justify-between py-4">
     <a class="flex items-center gap-2 text-2xl font-arima" href="/">
       <Logo class="size-12" />
@@ -17,52 +14,9 @@ const navigationLinks = [
       >
     </a>
     <button class="cursor-pointer relative z-50" id="menu-toggle">
-      <svg
-        class="size-6"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M3 6h18"></path>
-        <path d="M3 12h18"></path>
-        <path d="M3 18h18"></path>
-      </svg>
+      <Menu class="size-6" />
     </button>
-    <nav
-      id="navigation-header"
-      class="absolute z-40 bg-gray-950 shadow-lg shadow-sky-950 rounded-lg top-0 right-0 p-2 w-4/5 h-[80dvh] transition-transform duration-300 pt-10"
-      style="transform: translateX(calc(100%));"
-    >
-      <ul class="">
-        {
-          navigationLinks.map((link) => (
-            <li>
-              <a href={link.href}>{link.label}</a>
-            </li>
-          ))
-        }
-      </ul>
-      <div class="search flex items-center gap-2">
-        <label for="search-input" class="">
-          <svg
-            class="size-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
-              d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path><path
-              d="M21 21l-6 -6"></path></svg
-          >
-        </label>
-        <input type="text" id="search-input" placeholder="Buscar..." />
-      </div>
-    </nav>
+    <NavHeader />
   </div>
 </header>
 
@@ -75,10 +29,23 @@ const navigationLinks = [
       "navigation-header",
     ) as HTMLElement;
 
+    if (!$btnMenu || !$navHeader) {
+      console.error("Menu button or navigation header not found.");
+      return;
+    }
+
+    document.addEventListener("click", (event) => {
+      // Cierra el menú si se hace clic fuera de él
+      if (
+        !$navHeader.contains(event.target as Node) &&
+        !$btnMenu.contains(event.target as Node)
+      ) {
+        $navHeader.classList.remove("open");
+      }
+    });
+
     $btnMenu.addEventListener("click", () => {
-      $navHeader.style.transform === "translateX(0%)"
-        ? ($navHeader.style.transform = "translateX(calc(100%))")
-        : ($navHeader.style.transform = "translateX(0%)");
+      $navHeader.classList.toggle("open");
     });
   });
 </script>

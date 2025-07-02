@@ -1,0 +1,40 @@
+---
+const navigationLinks = [
+  { href: "/movies", label: "Películas" },
+  { href: "/tv-shows", label: "Series de TV" },
+  { href: "/trending", label: "Tendencias" },
+];
+---
+
+<nav
+  id="navigation-header"
+  class="absolute shadow-lg shadow-sky-950 rounded-lg top-0 right-0 w-4/5 max-w-xs h-screen transition-transform duration-300 overflow-hidden z-30"
+>
+  <div
+    class="bg-slate-950/90 backdrop-blur-lg backdrop-saturate-150 w-full h-full p-2 pt-14"
+  >
+    <ul class="space-y-4">
+      {
+        navigationLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="block px-4 py-2 text-white hover:bg-slate-800/50 rounded-lg transition-colors duration-200"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</nav>
+
+<style>
+  #navigation-header {
+    transform: translateX(100%);
+  }
+  #navigation-header.open {
+    transform: translateX(0);
+  }
+</style>

@@ -1,9 +1,10 @@
 ---
-
+import CrossIcon from "@assets/cross.svg";
+import SearchIcon from "@assets/search.svg";
 ---
 
 <section
-  class="py-20 bg-gradient-to-b from-slate-950 via-blue-900/50 to-slate-950 text-white text-center"
+  class="py-20 bg-gradient-to-b from-slate-950 via-blue-900 to-slate-950 text-white text-center"
 >
   <div class="w-11/12 mx-auto">
     <h1 class="font-bold font-arima text-balance text-title">
@@ -13,21 +14,27 @@
       Explora nuestra amplia colección de películas y series de TV. Desde los
       clásicos hasta los estrenos más recientes, ¡tenemos algo para todos!
     </p>
-    <form class="flex justify-center gap-2 pt-5">
-      <input
-        class="border border-gray-400/10 rounded-full px-4 py-2 w-full max-w-md focus:outline-none focus:ring-1 focus:ring-blue-600 placeholder:text-gray-400/50 placeholder:font-light"
-        type="search"
-        name="search"
-        placeholder="Buscar películas o series..."
-        aria-label="Buscar"
-        required
-      />
-      <button
-        type="submit"
-        class="bg-blue-600 p-2 px-4 rounded-full cursor-pointer"
+    <!-- From Uiverse.io by ahmedyasserdev -->
+    <div class="flex justify-center pt-8">
+      <form
+        class="form relative flex justify-center items-center w-full max-w-xl"
       >
-        Buscar
-      </button>
-    </form>
+        <button class="absolute left-2 -translate-y-1/2 top-1/2 p-1">
+          <SearchIcon class="size-5 text-gray-300" />
+        </button>
+        <input
+          class="input rounded-full w-full px-10 py-3 border-2 border-gray-300/10 focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
+          placeholder="Search..."
+          required
+          type="text"
+        />
+        <button
+          type="reset"
+          class="absolute right-3 -translate-y-1/2 top-1/2 p-1"
+        >
+          <CrossIcon class="size-5 text-gray-300" />
+        </button>
+      </form>
+    </div>
   </div>
 </section>

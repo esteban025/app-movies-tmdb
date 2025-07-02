@@ -1,0 +1,194 @@
+---
+export interface Props {
+  videoKey: string;
+  title: string;
+  index: number;
+}
+
+const { videoKey, title, index } = Astro.props;
+const thumbnailUrl = `https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`;
+---
+
+<div
+  class="youtube-video-container relative w-full aspect-video rounded-lg overflow-hidden bg-slate-900 cursor-pointer group"
+  data-video-key={videoKey}
+  data-video-title={title}
+  data-index={index}
+>
+  <!-- Thumbnail -->
+  <img
+    src={thumbnailUrl}
+    alt={`Thumbnail de ${title}`}
+    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+    loading="lazy"
+  />
+
+  <!-- Play Button -->
+  <div
+    class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors duration-300"
+  >
+    <div
+      class="size-14 bg-red-500 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300"
+    >
+      <svg class="size-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Title overlay -->
+  <div
+    class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent"
+  >
+    <p class="text-white text-sm font-medium line-clamp-2">{title}</p>
+  </div>
+</div>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+
+<script is:inline>
+  // Sistema de lazy loading para videos de YouTube
+  function createYouTubeVideoLoader() {
+    const loadedVideos = new Set();
+    let observer = null;
+
+    function setupVideoContainer(container) {
+      container.addEventListener("click", () => {
+        loadVideo(container);
+      });
+    }
+
+    function loadVideo(container) {
+      const videoKey = container.dataset.videoKey;
+      const videoTitle = container.dataset.videoTitle;
+
+      if (!videoKey || loadedVideos.has(videoKey)) return;
+
+      // Crear iframe con configuraciones optimizadas
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+      iframe.title = videoTitle || "Video de YouTube";
+      iframe.className = "w-full h-full";
+      iframe.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.allowFullscreen = true;
+      iframe.loading = "lazy";
+
+      // Mostrar loading mientras carga el video
+      const loadingDiv = document.createElement("div");
+      loadingDiv.className =
+        "absolute inset-0 flex items-center justify-center bg-slate-900";
+      loadingDiv.innerHTML = `
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-white text-sm">Cargando video...</p>
+        </div>
+      `;
+
+      container.innerHTML = "";
+      container.appendChild(loadingDiv);
+
+      // Manejar carga del iframe
+      iframe.onload = function () {
+        if (container.contains(loadingDiv)) {
+          container.removeChild(loadingDiv);
+        }
+        loadedVideos.add(videoKey);
+      };
+
+      iframe.onerror = function () {
+        loadingDiv.innerHTML = `
+          <div class="flex flex-col items-center gap-3 text-center">
+            <div class="w-12 h-12 bg-red-600/20 rounded-full flex items-center justify-center">
+              <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <p class="text-red-400 text-sm">Error al cargar el video</p>
+            <button class="text-blue-400 text-sm hover:underline" onclick="location.reload()">
+              Reintentar
+            </button>
+          </div>
+        `;
+      };
+
+      container.appendChild(iframe);
+    }
+
+    function init() {
+      // Usar Intersection Observer para lazy loading más eficiente
+      observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              setupVideoContainer(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          root: null,
+          rootMargin: "50px",
+          threshold: 0.1,
+        },
+      );
+
+      // Observar todos los contenedores de video
+      document
+        .querySelectorAll(".youtube-video-container")
+        .forEach(function (container) {
+          observer.observe(container);
+        });
+    }
+
+    function destroy() {
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
+      loadedVideos.clear();
+    }
+
+    return {
+      init: init,
+      destroy: destroy,
+    };
+  }
+
+  // Variable global para manejar la instancia
+  let youtubeLoaderInstance = null;
+
+  function initializeYouTubeLoader() {
+    // Limpiar instancia anterior si existe
+    if (youtubeLoaderInstance) {
+      youtubeLoaderInstance.destroy();
+    }
+    youtubeLoaderInstance = createYouTubeVideoLoader();
+    youtubeLoaderInstance.init();
+  }
+
+  // Inicializar cuando el DOM esté listo
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeYouTubeLoader);
+  } else {
+    initializeYouTubeLoader();
+  }
+
+  // Limpiar al cambiar de página (para Astro)
+  document.addEventListener("astro:before-preparation", function () {
+    if (youtubeLoaderInstance) {
+      youtubeLoaderInstance.destroy();
+      youtubeLoaderInstance = null;
+    }
+  });
+
+  // Reinicializar en navegación de Astro
+  document.addEventListener("astro:page-load", initializeYouTubeLoader);
+</script>
