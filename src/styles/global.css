@@ -5,10 +5,16 @@
 /* Supports weights 100-900 */
 @import '@fontsource-variable/montserrat';
 
+/* Prevenir scroll horizontal global */
+html, body {
+  overflow-x: hidden;
+}
+
 @theme {
   --font-arima: 'Arima Variable', system-ui;
   --font-montserrat: 'Montserrat Variable', system-ui;
 }
+
 .text-title {
     font-size: clamp(2.2rem, 5vw, 3rem);
     line-height: 1.2;
