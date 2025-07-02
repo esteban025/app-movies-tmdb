@@ -1,0 +1,42 @@
+---
+import CardMovie from "@src/components/CardMovie.astro";
+import { envConfig } from "@src/envConfig";
+import type { TrendingMovie } from "../types/trendingMovie";
+const { publicApiKey, publicApiBaseUrl } = envConfig;
+
+function getTrendingMovies() {
+  return fetch(
+    `${publicApiBaseUrl}/trending/movie/day?api_key=${publicApiKey}&page=1`,
+  )
+    .then((response) => response.json())
+    .then((data) => data.results);
+}
+
+const trendingMovies: TrendingMovie[] = await getTrendingMovies();
+---
+
+<section>
+  <div class="w-11/12 mx-auto space-y-8">
+    <h2 class="font-bold font-arima">Películas en Tendencia</h2>
+    <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+      {
+        trendingMovies.map((movie) => (
+          <CardMovie
+            linkMovie={`/movies/${movie.id}`}
+            movieId={movie.id.toString()}
+            title={movie.title}
+            release_date={movie.release_date}
+            vote_average={movie.vote_average}
+            poster_path={movie.poster_path}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  h2 {
+    font-size: clamp(1.7rem, 2.5vw, 2.2rem);
+  }
+</style>

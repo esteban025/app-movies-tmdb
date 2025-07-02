@@ -1,0 +1,100 @@
+---
+import { fetchMovieDetails } from "@apis/fetchMovieDetails";
+import { fetchVideoMovie } from "@apis/fetchVideoMovie";
+import { envConfig } from "@src/envConfig";
+import Layout from "@src/layouts/Layout.astro";
+import { transformMinutes } from "@src/utils/transformMinutes";
+
+const { id } = Astro.params;
+const { publicImageApi } = envConfig;
+
+if (!id) {
+  throw new Error("Movie ID is required");
+}
+
+const movieDetails = await fetchMovieDetails(id);
+const videos = await fetchVideoMovie(id);
+const imagePosterUrl = `${publicImageApi}${movieDetails.poster_path}`;
+const imageBackdropUrl = `${publicImageApi}${movieDetails.backdrop_path}`;
+
+const teasers = videos.results
+  .filter((video) => video.type === "Teaser")
+  .slice(0, 4);
+
+if (teasers.length === 0) {
+  teasers.push(
+    ...videos.results.filter((video) => video.type === "Trailer").slice(0, 4),
+  );
+}
+---
+
+<Layout>
+  <section class="py-20 space-y-4">
+    <div class="fixed inset-0 -z-10">
+      <img
+        src={imageBackdropUrl}
+        alt={movieDetails.title}
+        class="object-cover w-full h-full brightness-20"
+      />
+    </div>
+    <article class="flex gap-3 w-11/12 max-w-5xl mx-auto">
+      <figure
+        class="rounded-lg overflow-hidden w-full max-w-[200px] aspect-[2/3] shadow-lg shadow-black"
+        transition:name={`image-${id}`}
+      >
+        <img
+          src={imagePosterUrl}
+          alt={movieDetails.title}
+          class="object-cover w-full h-full"
+        />
+      </figure>
+      <div class="w-full space-y-6">
+        <h1 class="font-bold font-arima text-subtitle text-balance">
+          {movieDetails.title}
+        </h1>
+        <div class="flex items-center justify-between">
+          <ul class="flex items-center gap-2 flex-wrap ug w-full px-2">
+            {
+              movieDetails.genres.map((genre) => (
+                <li class="border border-gray-300 p-1 px-2 rounded-full inline-block text-gray-300 text-sm lg:text-base">
+                  {genre.name}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="ug w-full text-center px-1">
+            {transformMinutes(movieDetails.runtime)}
+          </p>
+          <p class="ug w-full text-center px-1">{movieDetails.release_date}</p>
+        </div>
+        <p class="text-gray-400 text-balance">
+          {movieDetails.overview}
+        </p>
+      </div>
+    </article>
+    <section class="w-11/12 max-w-5xl mx-auto space-y-8">
+      <h2 class="text-balance text-xl font-arima font-semibold">Trailers</h2>
+      <article>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-4">
+          {
+            teasers.map((teaser) => (
+              <iframe
+                class="w-full aspect-video rounded-lg"
+                src={`https://www.youtube.com/embed/${teaser.key}`}
+                title={teaser.name}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            ))
+          }
+        </div>
+      </article>
+    </section>
+  </section>
+
+  <style>
+    .ug + .ug {
+      border-left: 1px solid #4b5563; /* gray-600 */
+    }
+  </style>
+</Layout>

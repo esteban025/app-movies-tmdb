@@ -1,14 +1,29 @@
+---
+import FooterPage from "@sections/FooterPage.astro";
+import HeaderPage from "@sections/HeaderPage.astro";
+import "@src/styles/global.css";
+
+// transiciones de paginas
+import { ClientRouter } from "astro:transitions";
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<meta
+			name="description"
+			content="Aplicación de películas usando TMDB API"
+		/>
+		<title>MovieTMDB</title>
+		<ClientRouter />
 	</head>
-	<body>
+	<body class="bg-slate-950 text-slate-50 overflow-x-hidden font-montserrat">
+		<HeaderPage />
 		<slot />
+		<FooterPage />
 	</body>
 </html>
 
